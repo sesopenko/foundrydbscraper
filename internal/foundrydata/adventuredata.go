@@ -87,10 +87,3 @@ type SystemDetails struct {
 	Routine      string      `json:"routine"`
 	Blurb        string      `json:"blurb"`
 }
-type NumberValue struct {
-	Value int `json:"value"`
-}
-
-type StringValue struct {
-	Value string `json:"value"`
-}

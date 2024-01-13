@@ -50,6 +50,55 @@ func Test_foundryTagProcessor(t *testing.T) {
 			},
 			want: `<a href="/actors/qXT1SQDtGqMkVl7Q.html">Shanrigol Heaps (3)</a>`,
 		},
+		{
+			name: "Spell Effect",
+			args: args{
+				text: `@UUID[Compendium.pf2e.spell-effects.Item.NXzo2kdgVixIZ2T1]{Spell Effect: Apex Companion}`,
+			},
+			want: "Spell Effect: Apex Companion",
+		},
+		{
+			name: "Condition",
+			args: args{
+				text: `@UUID[Compendium.pf2e.conditionitems.Item.dfCMdR4wnpbYNTix]{Stunned 1}`,
+			},
+			want: `<span class="condition">Stunned 1</span>`,
+		},
+		{
+			name: "Condition without Item",
+			args: args{
+				text: `@UUID[Compendium.pf2e.conditionitems.MIRkyAjyBeXivMa7]{Enfeebled 2}`,
+			},
+			want: `<span class="condition">Enfeebled 2</span>`,
+		},
+		{
+			name: "Roll with damage type",
+			args: args{
+				text: `[[/r (1d10+6)[bleed]]]`,
+			},
+			want: `<span class="roll">1d10+6 bleed</span>`,
+		},
+		{
+			name: "Item Link",
+			args: args{
+				text: `@Item[c5oQP02ulBQ7nIVs]{+1 Morningstar}`,
+			},
+			want: `<a href="/items/c5oQP02ulBQ7nIVs.html">+1 Morningstar</a>`,
+		},
+		{
+			name: "roll with desc",
+			args: args{
+				text: `[[/r 1d4 #rounds]]{1d4 rounds}`,
+			},
+			want: `<span class="roll">1d4 rounds</span>`,
+		},
+		{
+			name: "Simple roll",
+			args: args{
+				text: `[[/r 2d10]]`,
+			},
+			want: `<span class="roll">2d10</span>`,
+		},
 		//{
 		//	name: "Unhandled things",
 		//	args: args{

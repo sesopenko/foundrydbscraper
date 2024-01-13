@@ -248,12 +248,55 @@ func foundryTagProcessor(text string) template.HTML {
 			id, desc)
 	})
 
-	//re = regexp.MustCompile(`@[^\]]+\[[^\]]+\]{([^}]+)}`)
-	//output = re.ReplaceAllStringFunc(output, func(output string) string {
-	//	desc := re.FindStringSubmatch(output)[1]
-	//	return desc
-	//
-	//})
+	re = regexp.MustCompile(`@UUID\[Compendium.pf2e.spell-effects.Item\.[a-zA-Z0-9]+\]{([^}]+)}`)
+	output = re.ReplaceAllStringFunc(output, func(output string) string {
+		body := html.EscapeString(re.FindStringSubmatch(output)[1])
+		return body
+	})
+
+	re = regexp.MustCompile(`@UUID\[Compendium.pf2e.conditionitems.(Item.)?[a-zA-Z0-9]+\]{([^}]+)}`)
+	output = re.ReplaceAllStringFunc(output, func(output string) string {
+		body := html.EscapeString(re.FindStringSubmatch(output)[2])
+		return fmt.Sprintf(`<span class="condition">%s</span>`, body)
+	})
+
+	// Example: [[/r (1d10+6)[bleed]]]
+	re = regexp.MustCompile(`\[\[\/r \(([^\)]+)\)\[([^\]]+)\]\]\]`)
+	output = re.ReplaceAllStringFunc(output, func(output string) string {
+		roll := html.EscapeString(re.FindStringSubmatch(output)[1])
+		rollType := html.EscapeString(re.FindStringSubmatch(output)[2])
+		return fmt.Sprintf(`<span class="roll">%s %s</span>`, roll, rollType)
+	})
+
+	// Example: @Item[c5oQP02ulBQ7nIVs]{+1 Morningstar}
+	re = regexp.MustCompile(`@Item\[([a-zA-Z0-9]+)\]{([^}]+)}`)
+	output = re.ReplaceAllStringFunc(output, func(output string) string {
+		id := html.EscapeString(re.FindStringSubmatch(output)[1])
+		desc := html.EscapeString(re.FindStringSubmatch(output)[2])
+		return fmt.Sprintf(`<a href="/items/%s.html">%s</a>`,
+			id, desc)
+	})
+	// example: [[/r 1d4 #rounds]]{1d4 rounds}
+	re = regexp.MustCompile(`\[\[\/r [^\]]+\]\]{([^}]+)}`)
+	output = re.ReplaceAllStringFunc(output, func(output string) string {
+		desc := html.EscapeString(re.FindStringSubmatch(output)[1])
+		return fmt.Sprintf(`<span class="roll">%s</span>`, desc)
+	})
+
+	// Example: [[/r 2d10]]
+	re = regexp.MustCompile(`\[\[\/r ([^\]]+)\]\]`)
+	output = re.ReplaceAllStringFunc(output, func(output string) string {
+		roll := html.EscapeString(re.FindStringSubmatch(output)[1])
+		return fmt.Sprintf(`<span class="roll">%s</span>`, roll)
+	})
+
+	//Uncomment this to get most @ tags
+	re = regexp.MustCompile(`@[^\]]+\[[^\]]+\]{([^}]+)}`)
+	output = re.ReplaceAllStringFunc(output, func(output string) string {
+		desc := re.FindStringSubmatch(output)[1]
+		return desc
+
+	})
 
 	return template.HTML(output)
 }

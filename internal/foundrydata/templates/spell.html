@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{.Name}} ({{.Type}})</title>
+</head>
+<body>
+<header>
+    <h1>{{.Name}} ({{.Type}})</h1>
+</header>
+<div>
+    <div class="details">
+        <ul>
+            <li>Level: {{.System.Level.Value }}</li>
+            <li>Time: {{.System.Time.Value }}</li>
+            <li>
+                Target: {{.System.Target.Value }}
+            </li>
+            <li>
+                Rarity: {{.System.Traits.Rarity }}
+            </li>
+            <li>
+                Traditions: {{.System.Traits.Traditions }}
+            </li>
+        </ul>
+
+    </div>
+    <div class="spell-description">
+        {{ .System.Description.Value | safe }}
+    </div>
+
+</div>
+</body>
+</html>

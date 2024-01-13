@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spells</title>
+</head>
+<body>
+<header>
+    <h1>Spells</h1>
+</header>
+<div>
+    <ul>
+        {{range .}}
+        <li>
+            <a href="/spells/{{.ID}}.html">{{.Name}}</a>
+        </li>
+        {{end}}
+    </ul>
+</div>
+</body>
+</html>

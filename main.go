@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"foundrydbscraper/internal/foundrydata"
 	"log"
 	"net/http"
@@ -10,26 +11,9 @@ import (
 )
 
 func main() {
-	dbPath := os.Getenv("DB_PATH")
-	dbContent, err := os.ReadFile(dbPath)
-	if err != nil {
-		log.Fatalf("Error reading file: %s", err)
-	}
-
-	const path = "generated"
-	writePrettyJson(dbContent, err, path)
-
-	var db foundrydata.DBData
-
-	err = json.Unmarshal(dbContent, &db)
-	if err != nil {
-		log.Fatalf("Unable to unmarshal db: %s", err)
-	}
-
-	foundrydata.RenderIndex(path)
-	foundrydata.RenderJournalList(db, path)
-	foundrydata.RenderActors(db, path)
-	foundrydata.RenderItemList(db, path)
+	const savePath = "generated"
+	renderSystem(savePath)
+	renderModuleDb(savePath)
 
 	serve := false
 	for _, arg := range os.Args {
@@ -50,6 +34,37 @@ func main() {
 		}
 	}
 
+}
+
+func renderSystem(savePath string) {
+	const SYSTEM_ENV = "FOUNDRY_DATA_PATH"
+	dataPath := os.Getenv(SYSTEM_ENV)
+	if dataPath == "" {
+		panic(fmt.Errorf("%s environment variable not set.", SYSTEM_ENV))
+	}
+	foundrydata.LoadSpells(dataPath, savePath)
+}
+
+func renderModuleDb(savePath string) {
+	dbPath := os.Getenv("DB_PATH")
+	dbContent, err := os.ReadFile(dbPath)
+	if err != nil {
+		log.Fatalf("Error reading file: %s", err)
+	}
+
+	writePrettyJson(dbContent, err, savePath)
+
+	var db foundrydata.DBData
+
+	err = json.Unmarshal(dbContent, &db)
+	if err != nil {
+		log.Fatalf("Unable to unmarshal db: %s", err)
+	}
+
+	foundrydata.RenderIndex(savePath)
+	foundrydata.RenderJournalList(db, savePath)
+	foundrydata.RenderActors(db, savePath)
+	foundrydata.RenderItemList(db, savePath)
 }
 
 func writePrettyJson(dbContent []byte, err error, path string) {
