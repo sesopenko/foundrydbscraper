@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{.Name}}</title>
+</head>
+<body>
+<header>
+    <h1 class="title-journal">{{.Name}}</h1>
+</header>
+<div>
+    <h2>Pages</h2>
+    <div>
+        <ul class="page-list page-list-journal">
+            {{range .Pages }}
+            <li><a href="/journal_pages/{{.ID}}.html">{{.Name}}</a></li>
+            {{end}}
+        </ul>
+    </div>
+</div>
+</body>
+</html>

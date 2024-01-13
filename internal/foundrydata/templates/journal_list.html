@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Journals</title>
+</head>
+<body>
+<header>
+    <h1>Journals</h1>
+</header>
+<div>
+    <ul>
+        {{range .Journals}}
+        <li>
+            <a href="/journals/{{.ID}}.html">{{.Name}}</a>
+        </li>
+        {{end}}
+    </ul>
+</div>
+</body>
+</html>
