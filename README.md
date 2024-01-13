@@ -26,6 +26,12 @@ generated/
 ## TODO:
 
 * Copying images and rendering links to them.
+* Module Items
+* Module NPCs/Monsters
+* Pathfinder core:
+    * Monsters
+    * Items
+    * Spells
 
 ## Requirements
 
