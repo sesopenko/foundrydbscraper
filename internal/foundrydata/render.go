@@ -3,9 +3,11 @@ package foundrydata
 import (
 	"embed"
 	"fmt"
+	"html"
 	"html/template"
 	"os"
 	"path/filepath"
+	"regexp"
 )
 
 //go:embed templates
@@ -101,7 +103,31 @@ func getTemplate(templateFilename string) (error, *template.Template) {
 	templateString := string(templateContent)
 	tmpl, err := template.New("template").Funcs(template.FuncMap{
 		"safe": func(text string) template.HTML {
-			return template.HTML(text)
+			// Example:
+			// @UUID[JournalEntry.3T1M395V6J75OsEp.JournalEntryPage.8Jl0TWoH4iUJzJxK]{Beginning the Adventure}
+			re := regexp.MustCompile(`@UUID\[JournalEntry\.([a-zA-Z0-9]+)\.JournalEntryPage\.([a-zA-Z0-9]+)\]{([^}]+)}`)
+			output := re.ReplaceAllStringFunc(text, func(match string) string {
+				//journalId := html.EscapeString(re.FindStringSubmatch((match))[1])
+				pageId := html.EscapeString(re.FindStringSubmatch(match)[2])
+				linkTitle := html.EscapeString(re.FindStringSubmatch(match)[3])
+				return fmt.Sprintf(`<a href="/journal_pages/%s.html">%s</a>`, pageId, linkTitle)
+
+			})
+
+			re = regexp.MustCompile(`@UUID\[JournalEntry\.([a-zA-Z0-9]+)\]{([^}]+)}`)
+			output = re.ReplaceAllStringFunc(output, func(match string) string {
+				journalId := html.EscapeString(re.FindStringSubmatch((match))[1])
+				linkTitle := html.EscapeString(re.FindStringSubmatch(match)[2])
+				return fmt.Sprintf(`<a href="/journals/%s.html">%s</a>`, journalId, linkTitle)
+			})
+
+			re = regexp.MustCompile(`@UUID\[\.([a-zA-Z0-9]+)\]{([^}]+)}`)
+			output = re.ReplaceAllStringFunc(output, func(match string) string {
+				journalPageId := html.EscapeString(re.FindStringSubmatch((match))[1])
+				linkTitle := html.EscapeString(re.FindStringSubmatch(match)[2])
+				return fmt.Sprintf(`<a href="/journal_pages/%s.html">%s</a>`, journalPageId, linkTitle)
+			})
+			return template.HTML(output)
 		},
 	}).Parse(templateString)
 	if err != nil {
