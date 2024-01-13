@@ -13,6 +13,11 @@ import (
 //go:embed templates
 var templates embed.FS
 
+func RenderIndex(saveDirPath string) {
+	renderComponent(nil, "index.html", saveDirPath, "index")
+
+}
+
 func RenderJournalList(data DBData, saveDirPath string) {
 	templateFilename := "journal_list.html"
 	err, tmpl := getTemplate(templateFilename)
@@ -34,64 +39,50 @@ func RenderJournalList(data DBData, saveDirPath string) {
 	}
 
 	for _, journal := range data.Journals {
-		RenderJournal(journal, saveDirPath)
+		renderJournal(journal, saveDirPath)
 	}
 }
 
-func RenderJournal(journal Journal, saveDirPath string) {
+func renderJournal(journal Journal, saveDirPath string) {
 	templateFilename := "journal.html"
-	err, tmpl := getTemplate(templateFilename)
-	if err != nil {
-		panic(err)
-	}
-
 	dirPath := filepath.Join(saveDirPath, "journals")
-	err = os.MkdirAll(dirPath, 0755)
-	if err != nil {
-		fmt.Printf("Error creating directory: %s", err)
-		panic(err)
-	}
-
-	savePath := filepath.Join(dirPath, fmt.Sprintf("%s.html", journal.ID))
-	file, err := os.OpenFile(savePath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
-	if err != nil {
-		fmt.Printf("Error opening file: %s", err)
-		panic(err)
-	}
-	defer file.Close()
-
-	err = tmpl.Execute(file, journal)
-	if err != nil {
-		fmt.Printf("Error writing journal %s: %s", journal.ID, err)
-	}
+	id := journal.ID
+	renderComponent(journal, templateFilename, dirPath, id)
 
 	for _, page := range journal.Pages {
 		renderJournalPage(page, saveDirPath)
 	}
 }
 
-func renderJournalPage(page JournalPage, saveDirPath string) {
-	err, tmpl := getTemplate("journal_page.html")
+func renderComponent(renderData interface{}, templateFilename string, dirPath string, id string) {
+	err, tmpl := getTemplate(templateFilename)
 	if err != nil {
 		panic(err)
 	}
-	dirPath := filepath.Join(saveDirPath, "journal_pages")
+
 	err = os.MkdirAll(dirPath, 0755)
 	if err != nil {
 		fmt.Printf("Error creating directory: %s", err)
 		panic(err)
 	}
-	savePath := filepath.Join(dirPath, fmt.Sprintf("%s.html", page.ID))
+
+	savePath := filepath.Join(dirPath, fmt.Sprintf("%s.html", id))
 	file, err := os.OpenFile(savePath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
 		fmt.Printf("Error opening file: %s", err)
 		panic(err)
 	}
 	defer file.Close()
-	err = tmpl.Execute(file, page)
+
+	err = tmpl.Execute(file, renderData)
 	if err != nil {
-		fmt.Printf("Error writing journal %s: %s", page.ID, err)
+		fmt.Printf("Error rendering %s (%s): %s", templateFilename, id, err)
 	}
+}
+
+func renderJournalPage(page JournalPage, saveDirPath string) {
+	dirPath := filepath.Join(saveDirPath, "journal_pages")
+	renderComponent(page, "journal_page.html", dirPath, page.ID)
 }
 
 func getTemplate(templateFilename string) (error, *template.Template) {

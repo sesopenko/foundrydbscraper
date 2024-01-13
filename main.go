@@ -23,6 +23,7 @@ func main() {
 	}
 
 	const path = "generated"
+	foundrydata.RenderIndex(path)
 	foundrydata.RenderJournalList(db, path)
 
 	serve := false
