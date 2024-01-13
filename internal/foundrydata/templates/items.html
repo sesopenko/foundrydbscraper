@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Items</title>
+</head>
+<body>
+<header>
+    <h1>Items</h1>
+</header>
+<div>
+    <ul>
+        {{range .Items}}
+        <li>
+            <a href="/items/{{.ID}}.html">{{.Name}} ({{.Type}})</a>
+        </li>
+        {{end}}
+    </ul>
+</div>
+</body>
+</html>

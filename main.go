@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"sort"
 )
 
 func main() {
@@ -27,13 +26,10 @@ func main() {
 		log.Fatalf("Unable to unmarshal db: %s", err)
 	}
 
-	sort.Slice(db.Actors, func(i, j int) bool {
-		return db.Actors[i].Name < db.Actors[j].Name
-	})
-
 	foundrydata.RenderIndex(path)
 	foundrydata.RenderJournalList(db, path)
 	foundrydata.RenderActors(db, path)
+	foundrydata.RenderItemList(db, path)
 
 	serve := false
 	for _, arg := range os.Args {

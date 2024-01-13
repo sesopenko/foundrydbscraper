@@ -25,7 +25,6 @@ generated/
 
 ## TODO:
 
-* Module Items
 * Pathfinder core:
     * Monsters
     * Items

@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"sort"
 	"strings"
 )
 
@@ -46,7 +47,44 @@ func RenderJournalList(data DBData, saveDirPath string) {
 	}
 }
 
+func RenderItemList(data DBData, saveDirPath string) {
+
+	sort.Slice(data.Items, func(i, j int) bool {
+		return data.Items[i].Name < data.Items[j].Name
+
+	})
+	err, tmpl := getTemplate("items.html")
+	if err != nil {
+		panic(err)
+	}
+	listSavePath := filepath.Join(saveDirPath, "items.html")
+	file, err := os.OpenFile(listSavePath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
+	if err != nil {
+		fmt.Printf("Error opening file: %s", err)
+		panic(err)
+	}
+	defer file.Close()
+
+	err = tmpl.Execute(file, data)
+	if err != nil {
+		fmt.Printf("Error writing journal %s", err)
+	}
+
+	for _, item := range data.Items {
+		renderItem(item, saveDirPath)
+	}
+}
+
+func renderItem(item Item, saveDirPath string) {
+	dirPath := filepath.Join(saveDirPath, "items")
+	renderComponent(item, "item.html", dirPath, item.ID)
+}
+
 func RenderActors(data DBData, saveDirPath string) {
+
+	sort.Slice(data.Actors, func(i, j int) bool {
+		return data.Actors[i].Name < data.Actors[j].Name
+	})
 	err, tmpl := getTemplate("actor_list.html")
 	if err != nil {
 		panic(err)

@@ -24,9 +24,20 @@ type PageText struct {
 }
 
 type Item struct {
-	ID   string `json:"_id"`
-	Name string `json:"name"`
-	Type string `json:"type"`
+	ID     string     `json:"_id"`
+	Name   string     `json:"name"`
+	Type   string     `json:"type"`
+	System ItemSystem `json:"system"`
+}
+
+type ItemByName []Item
+
+func (ibn ItemByName) Swap(i, j int) {
+	ibn[i], ibn[j] = ibn[j], ibn[i]
+}
+
+func (ibn ItemByName) Less(i, j int) bool {
+	return ibn[i].Name < ibn[j].Name
 }
 
 type ItemSystem struct {
@@ -44,20 +55,20 @@ type Actor struct {
 	System ActorSystem `json:"system"`
 }
 
-type ByName []Actor
+type ActorByName []Actor
 
 // Len returns the length of the slice
-func (a ByName) Len() int {
+func (a ActorByName) Len() int {
 	return len(a)
 }
 
 // Swap swaps the elements with indexes i and j
-func (a ByName) Swap(i, j int) {
+func (a ActorByName) Swap(i, j int) {
 	a[i], a[j] = a[j], a[i]
 }
 
 // Less returns true if the element with index i should sort before the element with index j
-func (a ByName) Less(i, j int) bool {
+func (a ActorByName) Less(i, j int) bool {
 	return a[i].Name < a[j].Name
 }
 

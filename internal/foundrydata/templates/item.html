@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{.Name}}</title>
+</head>
+<body>
+<header>
+    <h1>{{.Name}} ({{.Type}})</h1>
+</header>
+<div>
+    {{ if .System.Description.Value }}
+    {{ .System.Description.Value | safe }}
+    {{ else }}
+        <span class="no-further-information">{{.Name}} ({{.Type}})</span>
+    {{end}}
+
+</div>
+</body>
+</html>
