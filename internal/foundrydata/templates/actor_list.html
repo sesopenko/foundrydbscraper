@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Actors</title>
+</head>
+<body>
+<header>
+  <h1>Actors</h1>
+</header>
+<div>
+  <ul>
+    {{range .Actors}}
+    <li>
+      <a href="/actors/{{.ID}}.html">{{.Name}} (<span class="actor-type">{{.Type}}</span>)</a>
+    </li>
+    {{end}}
+  </ul>
+</div>
+</body>
+</html>

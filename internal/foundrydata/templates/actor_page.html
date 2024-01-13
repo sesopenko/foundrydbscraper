@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{.Name}} ({{.Type}})</title>
+</head>
+<body>
+<header>
+    <h1>
+        {{.Name}} (<span class="actor-type">{{.Type}}</span>)
+    </h1>
+</header>
+<div>
+    {{if eq .Type "hazard"}}
+        {{if .System}}
+            {{ if .System.Details }}
+                {{ if .System.Details.Description }}
+                    <div class="hazard-description">
+                        <h2>Description</h2>
+                        {{.System.Details.Description | safe}}
+                    </div>
+                {{end}}
+
+                {{ if .System.Details.Disable }}
+                <div class="hazard-Disable">
+                    <h2>Disable</h2>
+                    {{.System.Details.Disable | safe}}
+                </div>
+                {{end}}
+                {{ if .System.Details.Reset }}
+                <div class="hazard-reset">
+                    <h2>Reset</h2>
+                    {{.System.Details.Reset | safe}}
+                </div>
+                {{end}}
+                {{ if .System.Details.Routine }}
+                <div class="hazard-routine">
+                    <h2>Routine</h2>
+                    {{.System.Details.Routine | safe}}
+                </div>
+                {{end}}
+
+                {{ if .System.Details.PrivateNotes }}
+                    <div class="private-notes">
+                        {{.System.Details.PrivateNotes | safe}}
+                    </div>
+                {{end}}
+            {{end}}
+        {{end}}
+    {{end}}
+    {{if .System}}
+        {{ if .System.Details }}
+            {{ if .System.Details.PublicNotes }}
+            <div class="public-notes">
+                {{.System.Details.PublicNotes | safe}}
+            </div>
+            {{end}}
+
+            {{ if .System.Details.PrivateNotes }}
+            <div class="private-notes">
+                {{.System.Details.PrivateNotes | safe}}
+            </div>
+            {{end}}
+        {{end}}
+    {{end}}
+</div>
+</body>
+</html>
