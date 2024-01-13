@@ -1,10 +1,13 @@
 # sesopenko/foundrydbscraper
 
 Scrapes the db file from a foundry module and produces a static website.  Created specifically to scrape the data
-from the [Abomination Vaults foundry module](https://foundryvtt.com/packages/pf2e-abomination-vaults) so that I can use it for machine learning for my own campaign.
+from the [Abomination Vaults foundry module](https://foundryvtt.com/packages/pf2e-abomination-vaults) so that I can use
+it for machine learning for my own campaign. Mostly just descriptions have been mapped to html files the first pass
+to see how the resulting MLL [embedding](https://python.langchain.com/docs/modules/data_connection/text_embedding/)
+behaves.
 
-Sharing the module files themselves breaks copyright. This program only extracts the data from the module which you
-already own. It will create a static site of the following structure:
+Sharing the module files which aren't licensed under the Open Game License breaks copyright. Please don't contact me
+looking for Abomination Vaults content.
 
 ## Static Site Structure
 
