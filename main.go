@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"sort"
 )
 
@@ -15,6 +16,9 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error reading file: %s", err)
 	}
+
+	const path = "generated"
+	writePrettyJson(dbContent, err, path)
 
 	var db foundrydata.DBData
 
@@ -27,7 +31,6 @@ func main() {
 		return db.Actors[i].Name < db.Actors[j].Name
 	})
 
-	const path = "generated"
 	foundrydata.RenderIndex(path)
 	foundrydata.RenderJournalList(db, path)
 	foundrydata.RenderActors(db, path)
@@ -51,4 +54,19 @@ func main() {
 		}
 	}
 
+}
+
+func writePrettyJson(dbContent []byte, err error, path string) {
+	var jsonObj interface{}
+	err = json.Unmarshal(dbContent, &jsonObj)
+	if err != nil {
+		panic(err)
+	}
+	prettyJson, _ := json.MarshalIndent(jsonObj, "", "    ")
+	file, err := os.OpenFile(filepath.Join(path, "full_data.json"), os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+	file.WriteString(string(prettyJson))
 }
