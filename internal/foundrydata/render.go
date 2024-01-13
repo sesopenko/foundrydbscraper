@@ -118,6 +118,25 @@ func getTemplate(templateFilename string) (error, *template.Template) {
 				linkTitle := html.EscapeString(re.FindStringSubmatch(match)[2])
 				return fmt.Sprintf(`<a href="/journal_pages/%s.html">%s</a>`, journalPageId, linkTitle)
 			})
+
+			// Example: @Compendium[pf2e.actionspf2e.TiNDYUGlMmxzxBYU]{Search}
+			re = regexp.MustCompile(`@Compendium\[pf2e.actionspf2e\.[A-Za-z0-9]+\]{([^}]+)}`)
+			output = re.ReplaceAllStringFunc(output, func(match string) string {
+				action := html.EscapeString(re.FindStringSubmatch(match)[1])
+				return fmt.Sprintf(`<span class="action">%s</span>`, action)
+			})
+
+			// Example: @Check[type:perception|dc:18]{Perception}
+			re = regexp.MustCompile(`@Check\[type:([^\|]+)\|dc:(\d+)\]{([^}]+)}`)
+			output = re.ReplaceAllStringFunc(output, func(match string) string {
+				checkType := html.EscapeString(re.FindStringSubmatch(match)[1])
+				checkDc := html.EscapeString(re.FindStringSubmatch(match)[2])
+				checkDesc := html.EscapeString(re.FindStringSubmatch(match)[3])
+				return fmt.Sprintf(`<span class="check" data-type="%s">%s (DC %s)</span>`,
+					checkType, checkDesc, checkDc)
+				//return fmt.Sprintf(`<span class="action">%s</span>`, action)
+			})
+
 			return template.HTML(output)
 		},
 	}).Parse(templateString)
