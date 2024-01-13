@@ -201,6 +201,22 @@ func foundryTagProcessor(text string) template.HTML {
 		return stats
 	})
 
+	// generic unhandled stuff
+	re = regexp.MustCompile(`@Actor\[([a-zA-Z0-9]+)\]{([^}]+)}`)
+	output = re.ReplaceAllStringFunc(output, func(output string) string {
+		id := html.EscapeString(re.FindStringSubmatch(output)[1])
+		desc := html.EscapeString(re.FindStringSubmatch(output)[2])
+		return fmt.Sprintf(`<a href="/actors/%s.html">%s</a>`,
+			id, desc)
+	})
+
+	//re = regexp.MustCompile(`@[^\]]+\[[^\]]+\]{([^}]+)}`)
+	//output = re.ReplaceAllStringFunc(output, func(output string) string {
+	//	desc := re.FindStringSubmatch(output)[1]
+	//	return desc
+	//
+	//})
+
 	return template.HTML(output)
 }
 

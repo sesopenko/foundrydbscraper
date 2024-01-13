@@ -43,6 +43,20 @@ func Test_foundryTagProcessor(t *testing.T) {
 			},
 			want: `<span class="check">Fortitude (DC 30)</span>`,
 		},
+		{
+			name: "Actor link with desc",
+			args: args{
+				text: `@Actor[qXT1SQDtGqMkVl7Q]{Shanrigol Heaps (3)}`,
+			},
+			want: `<a href="/actors/qXT1SQDtGqMkVl7Q.html">Shanrigol Heaps (3)</a>`,
+		},
+		//{
+		//	name: "Unhandled things",
+		//	args: args{
+		//		text: `@Macro[m5Crw7ba08oqJdXc]{E06 - Bridge}`,
+		//	},
+		//	want: "E06 - Bridge",
+		//},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
