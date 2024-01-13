@@ -25,13 +25,16 @@ generated/
 
 ## TODO:
 
-* Copying images and rendering links to them.
 * Module Items
-* Module NPCs/Monsters
 * Pathfinder core:
     * Monsters
     * Items
     * Spells
+
+## Long Term TODO
+
+* Actual stat blocks (I forget who people are and where they are, more than stats, so doing stats later)
+* Copying images and rendering links to them.
 
 ## Requirements
 
