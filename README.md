@@ -25,7 +25,6 @@ generated/
 
 ## TODO:
 
-* NPC actors with descriptions
 * Module Items
 * Pathfinder core:
     * Monsters

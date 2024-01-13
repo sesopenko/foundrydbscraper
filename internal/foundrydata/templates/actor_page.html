@@ -61,6 +61,11 @@
                 {{.System.Details.PrivateNotes | safe}}
             </div>
             {{end}}
+            {{ if .System.Details.Blurb }}
+            <div class="blurb">
+                {{.System.Details.Blurb | safe}}
+            </div>
+            {{end}}
         {{end}}
     {{end}}
 </div>

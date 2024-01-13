@@ -74,6 +74,7 @@ type SystemDetails struct {
 	Disable      string      `json:"disable"`
 	Reset        string      `json:"reset"`
 	Routine      string      `json:"routine"`
+	Blurb        string      `json:"blurb"`
 }
 type NumberValue struct {
 	Value int `json:"value"`
